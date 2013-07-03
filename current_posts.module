@@ -176,3 +176,35 @@ function current_posts_permission() {
     )
   );
 }
+
+/**
+ * Custom page callback function, declared in current_posts_menu().
+ */
+function _current_posts_page() {
+  $result = current_posts_contents('page');
+  //Array to contain items for the page to render.
+  $items = array();
+  //Iterate over the resultset and format as links.
+  foreach ($result as $node) {
+    $items[] = array(
+    'data' => l($node->title, 'node/' . $node->nid),
+    ); 
+  }
+	  if (empty($items)) { //No content in the last week.
+    $page_array['current_posts_arguments'] = array(
+      //Title serves as page subtitle
+      '#title' => t('All posts from the last week'),
+      '#markup' => t('No posts available.'),
+    );
+    return $page_array;  
+  } 
+	  else {
+    $page_array['current_posts_arguments'] = array(
+      '#title' => t('All posts from the last week'),
+      '#items' => $items,
+      //Theme hook with suggestion.  
+      '#theme' => 'item_list__current_posts',
+    );
+    return $page_array;
+  }
+}
