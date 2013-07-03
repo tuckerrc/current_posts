@@ -94,11 +94,19 @@ function current_posts_block_view($delta = '') {
           $block['content'] = t('No posts available.');  
         } 
         else {
-          //Pass data through theme function.
-          $block['content'] = theme('item_list', array(
-            'items' => $items));
+        //Pass data through theme function.
+        $block['content']['posts'] = array(
+					'#theme' => 'item_list__current_posts__block',
+					'#items' => $items,
+				); 
         }
-      }
+				
+				$block['content']['more'] = array(
+					'#theme' => 'more_link__current_posts',
+					'#url' => 'current_posts',
+					'#title' => t('See the full list of current posts.'),
+				);
+			}
     return $block;
   }
   
